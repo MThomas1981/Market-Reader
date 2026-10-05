@@ -1,0 +1,19 @@
+node_modules/
+.next/
+out/
+dist/
+.expo/
+*.tsbuildinfo
+.env
+.env.local
+.env*.local
+apps/mobile/ios/
+apps/mobile/android/
+.DS_Store
+npm-debug.log*
+
+# Vercel
+.vercel/
+
+# Local price checks
+price-check/

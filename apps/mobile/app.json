@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Market Reader",
+    "slug": "market-reader",
+    "scheme": "marketreader",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.marketreader.app" },
+    "android": { "package": "com.marketreader.app" },
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": false }
+  }
+}

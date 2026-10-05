@@ -1,0 +1,16 @@
+{
+  "name": "market-reader",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Market Reader: research stocks, ETFs, crypto and currencies on web and mobile",
+  "workspaces": ["apps/web", "packages/*"],
+  "scripts": {
+    "dev": "npm run dev -w @market-reader/web",
+    "build": "npm run build -w @market-reader/web",
+    "start": "npm run start -w @market-reader/web",
+    "test": "npm test -w @market-reader/core",
+    "typecheck": "npm run typecheck -w @market-reader/core && npm run typecheck -w @market-reader/web",
+    "mobile": "cd apps/mobile && npx expo start"
+  },
+  "engines": { "node": ">=20" }
+}

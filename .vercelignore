@@ -1,0 +1,14 @@
+# Files Vercel should not upload when publishing the website
+node_modules
+**/node_modules
+**/.next
+.env
+**/.env
+**/.env.local
+**/.env.*.local
+apps/mobile
+_to_delete
+installer
+*.zip
+*.exe
+*.log
