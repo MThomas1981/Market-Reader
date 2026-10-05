@@ -12,6 +12,10 @@ Research stocks, ETFs, crypto and currencies on the web and on your phone, with 
 
 **No API keys are needed.** Without keys, or whenever a live data source is down or rate-limited, every screen falls back to made-up prices clearly marked "Demo data", so the app always runs. Crypto and currency prices are live even without keys. Accounts (Supabase), the AI assistant (Anthropic) and the Pro upgrade (Stripe test mode) switch on only when their keys are added; see the sections below. Without a Stripe key, the Plans page offers **Preview Pro (no payment)**, so every Pro feature (1 to 6-month estimates with their track record, deeper risk analysis) can be seen without paying.
 
+**Checking the Stripe payment flow.** The project's own Stripe key is deliberately not in this repository: secret keys are never committed, even test ones. There are two ways to check payments:
+- **No setup:** Plans > **Preview Pro (no payment)** switches every Pro feature on in your browser.
+- **Real Stripe test checkout:** create a free Stripe account, copy its **test** secret key (Developers > API keys, starts with `sk_test_`), put `STRIPE_SECRET_KEY=sk_test_...` in `apps/web/.env.local` and restart. Plans > **Upgrade to Pro** then opens Stripe Checkout in test mode for $20/month. Pay with card 4242 4242 4242 4242, any future expiry date, any CVC. Nothing is charged, and the app refuses live keys. The full setup is under "Turn on payments (Stripe)" below.
+
 Suggested tour: Markets home → search "AAPL" → the quote page's chart, price-range estimates and analysis → Dashboard (add a watchlist symbol; place a paper buy, sell part of it and watch cash, holdings and realized P&L update; try selling more shares than you hold to see the "Insufficient shares to sell" message) → Plans (click Preview Pro, then revisit the AAPL page) → **About this project** (linked in the footer), which summarises the finance methods and shows which data sources are live on your copy.
 
 Paper trades fill at the live price. On a copy with no stock-data key they fill at the demo price and the confirmation says so.
