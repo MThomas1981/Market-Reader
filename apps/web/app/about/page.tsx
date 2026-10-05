@@ -27,7 +27,7 @@ export default async function AboutPage() {
 
       <p className="surface" role="note" style={{ padding: '12px 16px' }}>
         <strong>Market Reader is a hypothetical application</strong> built as a class assignment for a senior-level college finance
-        course. It is not a real company or a live service, it does not hold money or place trades, and nothing in it is financial advice.
+        course. It is not a real company or a live service, it does not hold real money or place real trades (the portfolio is paper trading with simulated cash), and nothing in it is financial advice.
         Payments, where switched on, run only in Stripe&rsquo;s test mode.
       </p>
 

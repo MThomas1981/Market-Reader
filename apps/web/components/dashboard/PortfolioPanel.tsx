@@ -13,7 +13,14 @@ import { StatusPill, SymbolInput, tone } from './parts';
 const usd = (v: number | null) => formatPrice(v, 'USD');
 /** Money amounts (cash, value, P&L): always dollars and cents. */
 const money = (v: number | null) => (v === null ? '—' : `$${formatNumber(v, 2)}`);
-const signedUsd = (v: number | null) => (v === null ? '—' : `${v >= 0 ? '+' : '−'}${money(Math.abs(v))}`);
+/** Rounds to cents (or hundredths of a percent) so float dust like -0.000001 shows as 0, not −0.00 in red. */
+const r2 = (v: number | null) => (v === null ? null : Math.round(v * 100) / 100 || 0);
+const signedUsd = (raw: number | null) => {
+  const v = r2(raw);
+  return v === null ? '—' : `${v >= 0 ? '+' : '−'}${money(Math.abs(v))}`;
+};
+const pct = (v: number | null) => formatPercent(r2(v));
+const toneOf = (v: number | null) => tone(r2(v));
 const qty = (n: number) => formatNumber(n, n % 1 ? 4 : 0);
 const field = 'h-10 w-full min-w-0 rounded-lg border border-rule bg-paper px-3 text-sm text-ink focus:border-accent focus:outline-none';
 
@@ -49,10 +56,10 @@ function PaperTrading() {
       </p>
 
       <section aria-label="Portfolio summary" className="grid grid-cols-2 overflow-hidden rounded-[10px] border border-rule bg-paper md:grid-cols-4">
-        <Figure label="Total value" value={money(value.totalValue)} sub={`${signedUsd(value.totalReturn)} (${formatPercent(value.totalReturnPct)})`} cls={tone(value.totalReturn)} />
-        <Figure label="Cash" value={money(value.cash)} sub={`Today ${signedUsd(value.dayChange)}`} subCls={tone(value.dayChange)} />
-        <Figure label="Unrealized P&L" value={signedUsd(value.unrealizedPnl)} cls={tone(value.unrealizedPnl)} />
-        <Figure label="Realized P&L" value={signedUsd(value.realizedPnl)} cls={tone(value.realizedPnl)} />
+        <Figure label="Total value" value={money(value.totalValue)} sub={`${signedUsd(value.totalReturn)} (${pct(value.totalReturnPct)})`} cls={toneOf(value.totalReturn)} />
+        <Figure label="Cash" value={money(value.cash)} sub={`Today ${signedUsd(value.dayChange)}`} subCls={toneOf(value.dayChange)} />
+        <Figure label="Unrealized P&L" value={signedUsd(value.unrealizedPnl)} cls={toneOf(value.unrealizedPnl)} />
+        <Figure label="Realized P&L" value={signedUsd(value.realizedPnl)} cls={toneOf(value.realizedPnl)} />
       </section>
 
       <section aria-labelledby="hold-title" className="rounded-[10px] border border-rule bg-paper">
@@ -115,9 +122,9 @@ function HoldingRow({ row: r }: { row: PaperRow }) {
       <td className="px-2 text-right tabular-nums">{usd(r.avgBuyPrice)}</td>
       <td className="px-2 text-right tabular-nums">{usd(r.price)}</td>
       <td className="px-2 text-right font-semibold tabular-nums">{money(r.marketValue)}</td>
-      <td className={`px-2 text-right tabular-nums ${tone(r.unrealizedPnl)}`}>
+      <td className={`px-2 text-right tabular-nums ${toneOf(r.unrealizedPnl)}`}>
         {signedUsd(r.unrealizedPnl)}
-        <span className="block text-xs">{formatPercent(r.unrealizedPnlPct)}</span>
+        <span className="block text-xs">{pct(r.unrealizedPnlPct)}</span>
       </td>
       <td className="px-4 py-2">
         <form
@@ -252,7 +259,7 @@ function History() {
                 {t.pending && <span className="ml-2 rounded bg-fog px-1.5 text-xs">confirming…</span>}
               </span>
               {t.realizedPnl !== null && (
-                <span className={`tabular-nums ${tone(t.realizedPnl)}`} title="Realized P&L">{signedUsd(t.realizedPnl)}</span>
+                <span className={`tabular-nums ${toneOf(t.realizedPnl)}`} title="Realized P&L">{signedUsd(t.realizedPnl)}</span>
               )}
               <span className="w-full text-xs text-muted sm:w-auto">
                 {new Date(t.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}

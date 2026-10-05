@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { PLAN_FEATURES, PLANS } from '@market-reader/core';
 import { getViewer } from '@/lib/viewer';
 import { BillingButton } from '@/components/BillingButton';
+import { ProPreviewButton } from '@/components/ProPreviewButton';
 import { billingEnabled } from '@/lib/billing';
 import { authEnabled } from '@/lib/supabase/config';
 
@@ -22,7 +23,7 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
       <p className="surface" role="note" style={{ padding: '12px 16px', margin: '16px 0', maxWidth: '72ch' }}>
         <strong>Test mode, no real charges.</strong> This is a class project, so checkout uses Stripe&rsquo;s test mode. To try the Pro
         upgrade, pay with the test card <strong>4242 4242 4242 4242</strong>, any future expiry date, any 3-digit CVC and any postcode.
-        {!billingEnabled() && ' Payments are switched off on this copy because no Stripe test key is set, so the upgrade button explains that instead.'}
+        {!billingEnabled() && ' Payments are switched off on this copy because no Stripe test key is set, so you can preview every Pro feature for free instead.'}
       </p>
       {sp.canceled && <p className="surface empty" role="status">Checkout was cancelled. Nothing was charged.</p>}
       {sp.ended && <p className="surface empty" role="status">Pro has ended and the test subscription is cancelled.</p>}
@@ -43,10 +44,17 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
           <h2>Pro</h2>
           <div className="plan-price">${PLANS.pro.priceMonthlyUsd}<span> a month</span></div>
           <p className="muted">Cancel any time from your account page. Billing by Stripe.</p>
-          {v.plan === 'pro' ? (
+          {v.proPreview ? (
+            <>
+              <span className="plan-current">Previewing Pro on this browser</span>
+              <ProPreviewButton end />
+            </>
+          ) : v.plan === 'pro' ? (
             <Link className="plan-current" href="/account">Your current plan · manage</Link>
-          ) : (
+          ) : billingEnabled() ? (
             <BillingButton action="checkout" label="Upgrade to Pro" primary />
+          ) : (
+            <ProPreviewButton />
           )}
         </section>
       </div>
